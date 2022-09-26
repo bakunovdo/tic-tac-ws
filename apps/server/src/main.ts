@@ -1,18 +1,24 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
+import express from 'express';
+import { Server } from 'socket.io';
+import { createServer } from 'http';
+import cors from 'cors';
 
-import * as express from 'express';
+import { CORS, PORT } from './config';
+import { onConnection } from './ws';
 
 const app = express();
 
-app.get('/api', (req, res) => {
-  res.send({ message: 'Welcome to server!' });
+app.use(cors(CORS));
+
+const server = createServer(app);
+const io = new Server(server, { cors: CORS });
+
+app.get('/', (req, res) => {
+  res.send('Hello World!');
 });
 
-const port = process.env.port || 3333;
-const server = app.listen(port, () => {
-  console.log(`Listening at http://localhost:${port}/api`);
+server.listen(PORT, () => {
+  console.log(`[server]: Server is running at http://localhost:${PORT}`);
 });
-server.on('error', console.error);
+
+io.on('connection', onConnection(io));
