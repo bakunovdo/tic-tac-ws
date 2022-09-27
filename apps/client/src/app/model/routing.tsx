@@ -3,8 +3,8 @@ import { sample } from "effector";
 import { createHistoryRouter } from "atomic-router";
 import { createBrowserHistory } from "history";
 
-import { LobbyPage } from "../pages/lobby";
-import { NotFound } from "../pages/not-found";
+import { LobbyPage } from "../../pages/lobby";
+import { NotFound } from "../../pages/not-found";
 
 export const routes = [
   { path: "/", route: LobbyPage.route },
@@ -19,14 +19,12 @@ router.setHistory(history);
 
 const log =
   (name?: string) =>
-  (...args: any[]) =>
+  (...args: unknown[]) =>
     console.log(name ? name : "", ...args);
 
 router.$path.watch(log("path"));
 router.$activeRoutes.watch(log("activeRoutes"));
 router.routeNotFound.watch(log("routeNotFound"));
-
-console.log(router.routes);
 
 sample({
   clock: router.routeNotFound,

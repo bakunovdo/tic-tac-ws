@@ -16,6 +16,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@tic-tac-ws/config": ["libs/config/src/index.ts"],
       "@tic-tac-ws/state": ["libs/state/src/index.ts"]
     }
   },
