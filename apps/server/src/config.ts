@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const ALLOWED_ORIGINS = [/https?:\/\/127\.0\.0\.1:.+/];
+const ALLOWED_ORIGINS = [/https?:\/\/127\.0\.0\.1:.+/, /https?:\/\/localhost:.+/];
 
 // SERVER
 export const PORT = process.env.PORT;

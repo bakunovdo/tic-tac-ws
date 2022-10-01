@@ -6,6 +6,7 @@
     "client-e2e": "apps/client-e2e",
     "config": "libs/config",
     "server": "apps/server",
-    "state": "libs/state"
+    "state": "libs/state",
+    "types": "libs/types"
   }
 }

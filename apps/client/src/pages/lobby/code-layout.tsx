@@ -3,6 +3,7 @@ import { FormEvent, useState } from "react";
 type Props = {
   code: string;
   onSubmit: (text: string) => void;
+  onRefresh: () => void;
 };
 
 export const CodeLayout: React.FC<Props> = (props) => {
@@ -20,7 +21,7 @@ export const CodeLayout: React.FC<Props> = (props) => {
   };
 
   const handleRefresh = () => {
-    console.log("Hello");
+    props.onRefresh();
   };
 
   return (

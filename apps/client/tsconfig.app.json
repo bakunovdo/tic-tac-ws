@@ -26,7 +26,5 @@
     "**/*.jsx",
     "**/*.ts",
     "**/*.tsx",
-    "../../postcss.config.js",
-    "../../tailwind.config.js"
   ]
 }

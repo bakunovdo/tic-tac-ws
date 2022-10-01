@@ -23,9 +23,8 @@ export class ServerState implements TServerState {
     return { lobby: this.lobby, rooms: this.rooms, users: this.users };
   }
 
-  initUser(id: UserId, code: string): User {
+  initUser(id: UserId): User {
     const me = this.createUser(id);
-    this.lobby.enter(me, code);
     return me;
   }
 
