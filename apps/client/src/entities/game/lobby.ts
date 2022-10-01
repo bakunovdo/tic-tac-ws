@@ -1,18 +1,10 @@
-import {
-  WSLobbyConnectFromClient,
-  WSLobbyToClient,
-  WSLobbyUpdateCodeFromClient,
-  WSServerPayload,
-} from "@tic-tac-ws/types";
+import { WSClientPayload, WSLobbyConnectFromClient, WSServerPayload } from "@tic-tac-ws/types";
 import { sample } from "effector";
+import { createSocketControl } from "./create-ws-control";
 
 import { gameDomain } from "./domain";
 import { $io } from "./socket";
 import { UI } from "./types";
-
-function lobbyMatcher(postfix: string) {
-  return (data: Partial<WSLobbyToClient> | undefined) => `lobby:${postfix}` === data?.type;
-}
 
 export const $lobbyCode = gameDomain.createStore<string | null>(null);
 
@@ -26,27 +18,24 @@ const messageReceived = gameDomain.createEvent<WSServerPayload>();
 
 $lobbyCode.on(updateCode, (_, payload) => payload);
 
-sample({
-  clock: $io,
-  filter: Boolean,
-  fn: (socket) => {
-    socket.on("lobby", messageReceived);
-  },
+const lobbyControl = createSocketControl<WSClientPayload, WSServerPayload>($io, {
+  channel: "lobby",
+  onTarget: messageReceived,
 });
 
 sample({
   clock: messageReceived,
-  filter: lobbyMatcher("code"),
-  fn: (payload) => payload.data,
+  filter: lobbyControl.match("code"),
+  fn: lobbyControl.extract("data"),
   target: $lobbyCode,
 });
 
-sample({
-  source: $io,
-  filter: Boolean,
+lobbyControl.emit({
   clock: refreshCodePressed,
-  fn: (socket) => {
-    const payload: WSLobbyUpdateCodeFromClient = { type: "lobby:update-code" };
-    socket.emit("lobby", payload);
-  },
+  send: { type: "lobby:update-code" },
+});
+
+lobbyControl.emit({
+  clock: formSubmitted,
+  send: (data) => ({ type: "lobby:connect", data }),
 });
