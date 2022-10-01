@@ -42,13 +42,15 @@ export function createSocketControl<
     });
   }
 
-  function match(postfix: string) {
-    return (data: Partial<ServerPayload> | undefined) => `${emitName}:${postfix}` === data?.type;
+  function match(matchType: ServerPayload["type"]) {
+    return (data: Partial<ServerPayload> | undefined) => matchType === data?.type;
   }
 
   function extract(key: keyof ServerPayload) {
     return (data: ServerPayload) => data[key];
   }
+
+  //impliment split-cases
 
   return { emit, match, extract };
 }

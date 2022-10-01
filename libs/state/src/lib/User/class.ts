@@ -21,7 +21,7 @@ export class User implements TUser {
 
     this.id = params.id;
     this.room = params.room;
-    this.code = createUniqCode();
+    this.code = createUniqCode(CODE_STRENGTH);
 
     if (params.room) this.join(params.room);
     else this.state.lobby.enter(this, this.code);

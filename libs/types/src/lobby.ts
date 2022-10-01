@@ -1,4 +1,6 @@
-import { LobbyGeneric } from "./base";
+import { LobbyChannel, LobbyGeneric, WSAsyncGeneric } from "./base";
+
+//common
 
 // to server
 export type WSLobbyConnectFromClient = LobbyGeneric<"connect", string>;
@@ -8,5 +10,6 @@ export type WSLobbyToServerPayload = WSLobbyConnectFromClient | WSLobbyUpdateCod
 
 // to client
 export type WSLobbyCodeToClient = LobbyGeneric<"code", string>;
+export type WSLobbyConnectResult = WSAsyncGeneric<`${LobbyChannel}-connect`>;
 
-export type WSLobbyToClient = WSLobbyCodeToClient;
+export type WSLobbyToClient = WSLobbyCodeToClient | WSLobbyConnectResult;

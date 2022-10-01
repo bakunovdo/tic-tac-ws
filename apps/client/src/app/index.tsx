@@ -1,6 +1,9 @@
+import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
 
 import { Route, RouterProvider } from "atomic-router-react";
+
+import { ToastContainer } from "react-toastify";
 
 import { router } from "./model/routing";
 
@@ -13,11 +16,14 @@ export function Application() {
   useEffect(appStarted, []);
 
   return (
-    <div className="h-screen text-xl">
-      <RouterProvider router={router}>
-        <Route route={LobbyPage.route} view={LobbyPage.Page} />
-        <Route route={NotFound.route} view={NotFound.Page} />
-      </RouterProvider>
-    </div>
+    <>
+      <div className="h-screen text-xl">
+        <RouterProvider router={router}>
+          <Route route={LobbyPage.route} view={LobbyPage.Page} />
+          <Route route={NotFound.route} view={NotFound.Page} />
+        </RouterProvider>
+      </div>
+      <ToastContainer />
+    </>
   );
 }

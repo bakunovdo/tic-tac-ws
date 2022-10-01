@@ -1,5 +1,9 @@
-import { WSClientPayload, WSLobbyConnectFromClient, WSServerPayload } from "@tic-tac-ws/types";
 import { sample } from "effector";
+
+import { toast } from "react-toastify";
+
+import { WSClientPayload, WSLobbyConnectFromClient, WSServerPayload } from "@tic-tac-ws/types";
+
 import { createSocketControl } from "./create-ws-control";
 
 import { gameDomain } from "./domain";
@@ -25,9 +29,19 @@ const lobbyControl = createSocketControl<WSClientPayload, WSServerPayload>($io, 
 
 sample({
   clock: messageReceived,
-  filter: lobbyControl.match("code"),
+  filter: lobbyControl.match("lobby:code"),
   fn: lobbyControl.extract("data"),
   target: $lobbyCode,
+});
+
+sample({
+  clock: messageReceived,
+  filter: lobbyControl.match("[lobby-connect]-error"),
+  fn: ({ data }) => {
+    toast(data, {
+      toastId: "[lobby-connect]-error" + data,
+    });
+  },
 });
 
 lobbyControl.emit({
