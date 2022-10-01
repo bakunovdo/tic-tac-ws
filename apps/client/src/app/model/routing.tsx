@@ -5,9 +5,11 @@ import { createBrowserHistory } from "history";
 
 import { LobbyPage } from "../../pages/lobby";
 import { NotFound } from "../../pages/not-found";
+import { MatchPage } from "../../pages/match";
 
 export const routes = [
   { path: "/", route: LobbyPage.route },
+  { path: "/:matchId", route: MatchPage.route },
   { path: "/404", route: NotFound.route },
 ];
 

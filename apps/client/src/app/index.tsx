@@ -11,6 +11,7 @@ import { LobbyPage } from "../pages/lobby";
 import { NotFound } from "../pages/not-found";
 import { useEffect } from "react";
 import { appStarted } from "./model";
+import { MatchPage } from "../pages/match";
 
 export function Application() {
   useEffect(appStarted, []);
@@ -21,6 +22,7 @@ export function Application() {
         <RouterProvider router={router}>
           <Route route={LobbyPage.route} view={LobbyPage.Page} />
           <Route route={NotFound.route} view={NotFound.Page} />
+          <Route route={MatchPage.route} view={MatchPage.Page} />
         </RouterProvider>
       </div>
       <ToastContainer />
