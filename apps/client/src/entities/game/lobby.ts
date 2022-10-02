@@ -1,6 +1,5 @@
-import { sample } from "effector";
-
-import { toast } from "react-toastify";
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import { split } from "effector";
 
 import { WSClientPayload, WSLobbyConnectFromClient, WSServerPayload } from "@tic-tac-ws/types";
 import { createSocketControl } from "@tic-tac-ws/ws-control";
@@ -8,6 +7,7 @@ import { createSocketControl } from "@tic-tac-ws/ws-control";
 import { gameDomain } from "./domain";
 import { $io } from "./socket";
 import { UI } from "./types";
+import { notifyFx } from "../toast";
 
 export const $lobbyCode = gameDomain.createStore<string | null>(null);
 
@@ -26,20 +26,23 @@ const lobbyControl = createSocketControl<WSClientPayload, WSServerPayload>($io, 
   onTarget: messageReceived,
 });
 
-sample({
-  clock: messageReceived,
-  filter: lobbyControl.match("lobby:code"),
-  fn: lobbyControl.extract("data"),
-  target: $lobbyCode,
-});
-
-sample({
-  clock: messageReceived,
-  filter: lobbyControl.match("[lobby-connect]-error"),
-  fn: ({ data }) => {
-    toast(data, {
-      toastId: "[lobby-connect]-error" + data,
-    });
+split({
+  // @ts-ignore
+  source: messageReceived,
+  match: {
+    code: lobbyControl.match("lobby:code"),
+    notifyError: lobbyControl.match("[lobby-connect]-error"),
+  },
+  cases: {
+    code: updateCode.prepend(lobbyControl.extract("data")),
+    notifyError: notifyFx.prepend(({ data }: WSServerPayload) => {
+      return {
+        content: data,
+        options: {
+          toastId: "[lobby-connect]-error" + data,
+        },
+      };
+    }),
   },
 });
 
