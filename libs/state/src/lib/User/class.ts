@@ -26,7 +26,9 @@ export class User implements TUser {
   }
 
   updateCode() {
+    this.state.lobby.leave(this);
     this.code = createUniqCode(this.state.options.CODE_STRENGTH);
+    this.state.lobby.enter(this, this.code);
     return this.code;
   }
 

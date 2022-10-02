@@ -11,16 +11,16 @@ export class Lobby {
     this.players = new Map<string, User>();
   }
 
-  enter(user: User, userId: string) {
-    this.players.set(userId, user);
+  enter(user: User, userCode: string) {
+    this.players.set(userCode, user);
   }
 
   leave(user: User) {
-    this.players.delete(user.id);
+    this.players.delete(user.code);
   }
 
-  get(userId: string): User | undefined {
-    return this.players.get(userId);
+  get(userCode: string): User | undefined {
+    return this.players.get(userCode);
   }
 
   /**

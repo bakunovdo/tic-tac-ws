@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { split } from "effector";
+import { redirect } from "atomic-router";
 
 import { WSClientPayload, WSLobbyConnectFromClient, WSServerPayload } from "@tic-tac-ws/types";
 import { createSocketControl } from "@tic-tac-ws/ws-control";
@@ -8,6 +9,7 @@ import { gameDomain } from "./domain";
 import { $io } from "./socket";
 import { UI } from "./types";
 import { notifyFx } from "../toast";
+import { MatchPage } from "../../pages/match";
 
 export const $lobbyCode = gameDomain.createStore<string | null>(null);
 
@@ -32,6 +34,7 @@ split({
   match: {
     code: lobbyControl.match("lobby:code"),
     notifyError: lobbyControl.match("[lobby-connect]-error"),
+    navigateToRoom: lobbyControl.match("[lobby-connect]-success"),
   },
   cases: {
     code: updateCode.prepend(lobbyControl.extract("data")),
@@ -42,6 +45,11 @@ split({
           toastId: "[lobby-connect]-error" + data,
         },
       };
+    }),
+
+    navigateToRoom: redirect({
+      route: MatchPage.route,
+      params: (data: WSServerPayload) => ({ matchId: data.data }),
     }),
   },
 });

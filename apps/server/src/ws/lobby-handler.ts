@@ -39,10 +39,13 @@ export const lobbyHandler = ({ io, me }: TLobbyInitilizer) => {
           }
           const room = state.createRoom(uuidv4(), [me, userFromLobby]);
           room.players.forEach((user: User) => {
-            io.sockets.sockets.get(user.id)?.emit("data", {
-              data: "[switch-to-room]-success",
-              payload: room.id,
-            });
+            io.sockets.sockets.get(user.id)?.emit(
+              "lobby" as LobbyChannel,
+              {
+                type: "[lobby-connect]-success",
+                data: room.id,
+              } as WSLobbyToClient,
+            );
           });
         } else send({ type: "[lobby-connect]-error", data: "code invalid" });
       }
