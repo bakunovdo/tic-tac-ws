@@ -8,7 +8,7 @@ import { gameDomain } from "./domain";
 
 export const $io = gameDomain.createStore<Socket | null>(null);
 
-const initlizeSocketFx = gameDomain.createEffect(() => {
+export const initlizeSocketFx = gameDomain.createEffect(() => {
   if (!WS_URL) throw new Error("WebSocket URL not defined");
   return io(WS_URL);
 });

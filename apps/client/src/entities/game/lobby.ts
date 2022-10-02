@@ -3,8 +3,7 @@ import { sample } from "effector";
 import { toast } from "react-toastify";
 
 import { WSClientPayload, WSLobbyConnectFromClient, WSServerPayload } from "@tic-tac-ws/types";
-
-import { createSocketControl } from "./create-ws-control";
+import { createSocketControl } from "@tic-tac-ws/ws-control";
 
 import { gameDomain } from "./domain";
 import { $io } from "./socket";

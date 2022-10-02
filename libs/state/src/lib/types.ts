@@ -6,4 +6,10 @@ export interface TServerState {
   lobby: Lobby;
   users: Map<string, User>;
   rooms: Map<RoomId, Room>;
+
+  options: TServerOptions;
 }
+
+export type TServerOptions = {
+  CODE_STRENGTH?: number; // default 4
+};

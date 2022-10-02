@@ -1,15 +1,7 @@
-import { Event, EventPayload, sample, Store } from "effector";
+import { createEffect, Event, EventPayload, sample, Store } from "effector";
 import { Socket } from "socket.io-client";
 
-type Options<T = unknown> = {
-  onTarget: Event<T>;
-  channel:
-    | string
-    | {
-        on: string;
-        emit: string;
-      };
-};
+import { EmitParams, Options } from "./types";
 
 export function createSocketControl<
   ClientPayload extends Record<string, unknown>,
@@ -18,10 +10,14 @@ export function createSocketControl<
   const onName = typeof options.channel === "string" ? options.channel : options.channel.on;
   const emitName = typeof options.channel === "string" ? options.channel : options.channel.emit;
 
+  const attachEventHandlerFx = createEffect((socket: Socket) => {
+    socket.on(onName, options.onTarget);
+  });
+
   sample({
     clock: $socket,
     filter: Boolean,
-    fn: (socket) => socket.on(onName, options.onTarget),
+    target: attachEventHandlerFx,
   });
 
   function emit<Payload extends ClientPayload, T = void>({
@@ -31,14 +27,19 @@ export function createSocketControl<
     clock: Event<T>;
     send: Payload | ((event: EventPayload<Event<T>>) => Payload);
   }) {
+    const emitEventHandlerFx = createEffect<EmitParams<Payload, T>, void>(
+      ({ socket, clockData, payload }) => {
+        const data = typeof payload === "function" ? payload(clockData) : payload;
+        socket.emit(emitName, data);
+      },
+    );
+
     sample({
       source: $socket,
       filter: Boolean,
       clock,
-      fn: (socket, clock) => {
-        const payload = typeof send === "function" ? send(clock) : send;
-        socket.emit(emitName, payload);
-      },
+      fn: (socket, clockData) => ({ socket, clockData, payload: send }),
+      target: emitEventHandlerFx,
     });
   }
 

@@ -1,7 +1,7 @@
 import { User } from "./User/class";
 import { Lobby } from "./Lobby";
 import { Room, RoomId, TPlayers } from "./Room";
-import { TServerState } from "./types";
+import { TServerOptions, TServerState } from "./types";
 import { UserId } from "./User";
 
 export class ServerState implements TServerState {
@@ -9,10 +9,17 @@ export class ServerState implements TServerState {
   public users: Map<UserId, User>;
   public rooms: Map<RoomId, Room>;
 
-  constructor() {
+  public options: TServerOptions;
+
+  constructor(options: TServerOptions = {}) {
     this.lobby = new Lobby(this);
     this.users = new Map();
     this.rooms = new Map();
+
+    this.options = {
+      ...options,
+      CODE_STRENGTH: options.CODE_STRENGTH || 4,
+    };
   }
 
   get size() {
@@ -20,7 +27,7 @@ export class ServerState implements TServerState {
   }
 
   get state(): TServerState {
-    return { lobby: this.lobby, rooms: this.rooms, users: this.users };
+    return { lobby: this.lobby, rooms: this.rooms, users: this.users, options: this.options };
   }
 
   initUser(id: UserId): User {

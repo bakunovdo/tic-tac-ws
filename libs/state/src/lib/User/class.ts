@@ -4,8 +4,6 @@ import { TServerState } from "../types";
 
 import { createUniqCode } from "../../utils/create-room-code";
 
-import { CODE_STRENGTH } from "../../../../../apps/server/src/config";
-
 export type TUserContructor = TUser;
 
 export const initial: Partial<TUser> = { room: undefined };
@@ -21,14 +19,14 @@ export class User implements TUser {
 
     this.id = params.id;
     this.room = params.room;
-    this.code = createUniqCode(CODE_STRENGTH);
+    this.code = createUniqCode(this.state.options.CODE_STRENGTH);
 
     if (params.room) this.join(params.room);
     else this.state.lobby.enter(this, this.code);
   }
 
   updateCode() {
-    this.code = createUniqCode(CODE_STRENGTH);
+    this.code = createUniqCode(this.state.options.CODE_STRENGTH);
     return this.code;
   }
 

@@ -11,27 +11,16 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": [
-      "es2017",
-      "dom"
-    ],
+    "lib": ["es2017", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@tic-tac-ws/config": [
-        "libs/config/src/index.ts"
-      ],
-      "@tic-tac-ws/state": [
-        "libs/state/src/index.ts"
-      ],
-      "@tic-tac-ws/types": [
-        "libs/types/src/index.ts"
-      ]
+      "@tic-tac-ws/config": ["libs/config/src/index.ts"],
+      "@tic-tac-ws/state": ["libs/state/src/index.ts"],
+      "@tic-tac-ws/types": ["libs/types/src/index.ts"],
+      "@tic-tac-ws/ws-control": ["libs/ws-control/src/index.ts"]
     }
   },
-  "exclude": [
-    "node_modules",
-    "tmp"
-  ]
+  "exclude": ["node_modules", "tmp"]
 }
