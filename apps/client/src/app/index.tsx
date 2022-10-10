@@ -12,6 +12,7 @@ import { NotFound } from "../pages/not-found";
 import { useEffect } from "react";
 import { appStarted } from "./model";
 import { MatchPage } from "../pages/match";
+import { DebugWindow } from "../widgets/debug-window";
 
 export function Application() {
   useEffect(appStarted, []);
@@ -19,6 +20,7 @@ export function Application() {
   return (
     <>
       <div className="h-screen text-xl">
+        <DebugWindow />
         <RouterProvider router={router}>
           <Route route={LobbyPage.route} view={LobbyPage.Page} />
           <Route route={NotFound.route} view={NotFound.Page} />

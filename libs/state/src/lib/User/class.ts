@@ -19,7 +19,7 @@ export class User implements TUser {
 
     this.id = params.id;
     this.room = params.room;
-    this.code = createUniqCode(this.state.options.CODE_STRENGTH);
+    this.code = createUniqCode();
 
     if (params.room) this.join(params.room);
     else this.state.lobby.enter(this, this.code);
@@ -27,7 +27,7 @@ export class User implements TUser {
 
   updateCode() {
     this.state.lobby.leave(this);
-    this.code = createUniqCode(this.state.options.CODE_STRENGTH);
+    this.code = createUniqCode();
     this.state.lobby.enter(this, this.code);
     return this.code;
   }
@@ -57,7 +57,7 @@ export class User implements TUser {
   get info() {
     return {
       id: this.id,
-      Room: this.room,
+      code: this.code,
     };
   }
 

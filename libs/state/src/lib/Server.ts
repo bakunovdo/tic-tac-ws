@@ -18,7 +18,6 @@ export class ServerState implements TServerState {
 
     this.options = {
       ...options,
-      CODE_STRENGTH: options.CODE_STRENGTH || 4,
     };
   }
 

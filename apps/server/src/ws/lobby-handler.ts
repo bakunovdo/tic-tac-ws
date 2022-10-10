@@ -5,7 +5,6 @@ import { state, User } from "@tic-tac-ws/state";
 import { v4 as uuidv4 } from "uuid";
 
 import { WSLobbyToClient, LobbyChannel, WSLobbyToServerPayload } from "@tic-tac-ws/types";
-import { CODE_STRENGTH } from "../config";
 
 type TLobbyInitilizer = {
   me: User;
@@ -29,7 +28,7 @@ export const lobbyHandler = ({ io, me }: TLobbyInitilizer) => {
       }
       case "lobby:connect": {
         const enterCode = data.data;
-        if (typeof enterCode === "string" && enterCode.length === CODE_STRENGTH) {
+        if (typeof enterCode === "string") {
           if (enterCode === me.code) {
             return send({ type: "[lobby-connect]-error", data: "Cannot connect to myself" });
           }

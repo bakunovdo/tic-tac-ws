@@ -11,5 +11,5 @@ export interface TServerState {
 }
 
 export type TServerOptions = {
-  CODE_STRENGTH?: number; // default 4
+  // CODE_STRENGTH?: number; // default 4
 };

@@ -10,4 +10,4 @@ export const PORT = process.env.PORT;
 export const CORS = { origin: ALLOWED_ORIGINS };
 
 // GAME
-export const CODE_STRENGTH = Number(process.env.CODE_STRENGTH) || 4;
+// export const CODE_STRENGTH = Number(process.env.CODE_STRENGTH) || 4;

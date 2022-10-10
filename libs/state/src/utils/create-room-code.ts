@@ -1,17 +1,12 @@
-const alphabet = "abcdefjhijklmnopqrstuvwxyz";
-const numbers = "0123456789";
-const chars = alphabet + numbers;
+import { customAlphabet } from "nanoid";
 
-function getRandomPosInteger(max: number): number {
-  return Math.floor(Math.random() * max);
-}
-// 4 is okay for active 5 players, change collision 0,0015%, can be easily increased
-export function createUniqCode(len = 4): string {
-  let s = "" + alphabet[getRandomPosInteger(alphabet.length)];
+const nolookalikes = "346789ABCDEFGHJKLMNPQRTUVWXYIZ";
 
-  while (s.length < len) {
-    s += chars[getRandomPosInteger(chars.length)];
-  }
+/**
+  @link nano-id calculator https://zelark.github.io/nano-id-cc/
+*/
+const nanoid = customAlphabet(nolookalikes, 10);
 
-  return s.toUpperCase();
+export function createUniqCode(): string {
+  return nanoid();
 }

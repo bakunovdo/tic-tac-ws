@@ -25,23 +25,16 @@ export const CodeLayout: React.FC<Props> = (props) => {
   };
 
   return (
-    <div className="container h-full max-w-4xl mx-auto flex flex-col items-center justify-center">
-      <div className="flex flex-col w-full  max-w-xs mx-auto">
+    <div className="container h-full max-w-md mx-auto flex flex-col items-center justify-center">
+      <div className="flex flex-col w-full mx-auto">
         <div className="text-2xl font-bold text-center mb-4">
           <h2>Your code</h2>
         </div>
-        <div className="flex w-full items-center px-4 py-2">
-          <div className="font-bold text-4xl tracking-widest uppercase">{props.code}</div>
+        <div className="flex items-center px-4 py-2">
+          <div className="font-bold text-4xl tracking-widest uppercase" onClick={handleClick}>
+            {props.code}
+          </div>
           <div className="ml-auto">
-            <button
-              data-tip="Copy to clipboard"
-              className="btn btn-outline btn-sm mx-1 tooltip"
-              onClick={handleClick}
-            >
-              <span aria-label="copy" role="img">
-                C
-              </span>
-            </button>
             <button
               data-tip="Refresh code"
               className="btn btn-outline btn-sm mx-1 tooltip"
