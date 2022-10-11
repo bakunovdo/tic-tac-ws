@@ -13,6 +13,8 @@ export const onConnection = (io: Server) => (socket: Socket) => {
 
   socket.on("lobby", lobbyHandler({ io, me }));
 
+  // state.o
+
   socket.on("disconnect", () => {
     me.destroy();
   });

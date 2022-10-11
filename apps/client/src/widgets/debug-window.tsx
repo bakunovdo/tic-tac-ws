@@ -17,7 +17,7 @@ export const DebugWindow = () => {
         "absolute left-4 top-4 whitespace-pre-line text-sm max-w-md w-full max-h-96 overflow-hidden z-0",
         {
           "overflow-y-scroll": isOpen,
-          "max-h-11 max-w-xs": !isOpen,
+          "max-h-10 max-w-xs": !isOpen,
         },
       )}
     >

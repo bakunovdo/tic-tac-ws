@@ -48,6 +48,11 @@ export class ServerState implements TServerState {
     return new Room(this.state, id, users);
   }
 
+  // implement
+  // onRoomCreated((room: Room) => void) {
+  //   //
+  // }
+
   clearAll() {
     this.lobby = new Lobby(this);
     this.users = new Map();

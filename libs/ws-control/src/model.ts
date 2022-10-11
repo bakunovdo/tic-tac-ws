@@ -1,4 +1,4 @@
-import { createEffect, Event, EventPayload, sample, Store } from "effector";
+import { createEffect, createStore, Event, EventPayload, is, sample, Store } from "effector";
 import { Socket } from "socket.io-client";
 
 import { EmitParams, Options } from "./types";
@@ -7,16 +7,18 @@ export function createSocketControl<
   ClientPayload extends Record<string, unknown>,
   ServerPayload extends { type: string },
 >($socket: Store<Socket | null>, options: Options<ServerPayload>) {
-  const onName = typeof options.channel === "string" ? options.channel : options.channel.on;
-  const emitName = typeof options.channel === "string" ? options.channel : options.channel.emit;
+  const [$on, $emit] = createEventsStores(options.channel);
 
-  const attachEventHandlerFx = createEffect((socket: Socket) => {
-    socket.on(onName, options.onTarget);
-  });
+  const attachEventHandlerFx = createEffect(
+    ({ event, socket }: { event: string; socket: Socket }) => {
+      socket.on(event, options.onTarget);
+    },
+  );
 
   sample({
     clock: $socket,
-    filter: Boolean,
+    source: { socket: $socket, event: $on },
+    filter: (data): data is { socket: Socket; event: string } => Boolean(data.socket),
     target: attachEventHandlerFx,
   });
 
@@ -28,17 +30,22 @@ export function createSocketControl<
     send: Payload | ((event: EventPayload<Event<T>>) => Payload);
   }) {
     const emitEventHandlerFx = createEffect<EmitParams<Payload, T>, void>(
-      ({ socket, clockData, payload }) => {
+      ({ socket, emitName, clockData, payload }) => {
         const data = typeof payload === "function" ? payload(clockData) : payload;
         socket.emit(emitName, data);
       },
     );
 
     sample({
-      source: $socket,
-      filter: Boolean,
       clock,
-      fn: (socket, clockData) => ({ socket, clockData, payload: send }),
+      source: { socket: $socket, event: $emit },
+      filter: (data): data is { socket: Socket; event: string } => Boolean(data.socket),
+      fn: ({ socket, event }: { socket: Socket; event: string }, clockData) => ({
+        socket,
+        clockData,
+        emitName: event,
+        payload: send,
+      }),
       target: emitEventHandlerFx,
     });
   }
@@ -54,4 +61,18 @@ export function createSocketControl<
   //impliment split-cases
 
   return { emit, match, extract };
+}
+
+function createEventsStores(channel: Options["channel"]): [Store<string>, Store<string>] {
+  if (is.unit(channel)) return [channel, channel];
+
+  if (typeof channel === "string") {
+    const store = createStore(channel);
+    return [store, store];
+  }
+
+  const onStore = createStore(channel.on);
+  const emitStore = createStore(channel.emit);
+
+  return [onStore, emitStore];
 }

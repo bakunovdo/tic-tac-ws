@@ -1,6 +1,9 @@
 import { createRoute } from "atomic-router";
 
 import clx from "classnames";
+import { useEvent } from "effector-react";
+import { matchModel } from "../../entities/game";
+import { CellIdx } from "../../entities/game/match";
 
 const route = createRoute<{ matchId: string }>();
 
@@ -16,10 +19,11 @@ function chunk<T>(arr: T[], len: number) {
 }
 
 const Page: React.FC = () => {
+  const onCellPressed = useEvent(matchModel.events.cellPressed);
+
   const isMeTurn = true;
   const isEnemyTurn = !isMeTurn;
   const board = chunk([0, 1, -1, 0, 1, 0, 1, 0, -1], 3);
-
   return (
     <div className="max-w-xl mx-auto h-full flex flex-col justify-center">
       <div className="mx-auto w-1/2 flex justify-center items-center font-bold">
@@ -49,13 +53,14 @@ const Page: React.FC = () => {
       </div>
       <div className="mx-auto w-fit mt-12 mb-24">
         <div className="flex flex-col">
-          {board.map((row) => {
+          {board.map((row, rowIdx) => {
             return (
               <div className="flex">
-                {row.map((item) => {
+                {row.map((item, colIdx) => {
                   const isEmpty = item === 1 || item === -1;
                   return (
                     <div
+                      onClick={() => onCellPressed([rowIdx, colIdx] as [CellIdx, CellIdx])}
                       className={clx(
                         "flex w-24 h-24 border items-center justify-center hover:bg-slate-50",
                         {
