@@ -2,7 +2,7 @@ import { Room, RoomId } from "../Room";
 import { TUser } from "./types";
 import { TServerState } from "../types";
 
-import { createUniqCode } from "../../utils/create-room-code";
+import { createUniqCode } from "@tic-tac-ws/shared";
 
 export type TUserContructor = TUser;
 
@@ -19,7 +19,7 @@ export class User implements TUser {
 
     this.id = params.id;
     this.room = params.room;
-    this.code = createUniqCode();
+    this.code = params.id === "debug" ? "1234" : createUniqCode();
 
     if (params.room) this.join(params.room);
     else this.state.lobby.enter(this, this.code);
@@ -58,6 +58,7 @@ export class User implements TUser {
     return {
       id: this.id,
       code: this.code,
+      room: this.room || null,
     };
   }
 

@@ -19,7 +19,7 @@ export function Application() {
 
   return (
     <>
-      <div className="h-screen text-xl">
+      <div className="h-screen text-xl relative z-10">
         <DebugWindow />
         <RouterProvider router={router}>
           <Route route={LobbyPage.route} view={LobbyPage.Page} />

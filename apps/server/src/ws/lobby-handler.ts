@@ -2,9 +2,9 @@ import { Server } from "socket.io";
 
 import { state, User } from "@tic-tac-ws/state";
 
-import { v4 as uuidv4 } from "uuid";
-
 import { WSLobbyToClient, LobbyChannel, WSLobbyToServerPayload } from "@tic-tac-ws/types";
+
+import { nanoidNoLikes } from "@tic-tac-ws/shared";
 
 type TLobbyInitilizer = {
   me: User;
@@ -36,7 +36,7 @@ export const lobbyHandler = ({ io, me }: TLobbyInitilizer) => {
           if (!userFromLobby) {
             return send({ type: "[lobby-connect]-error", data: "user not find" });
           }
-          const room = state.createRoom(uuidv4(), [me, userFromLobby]);
+          const room = state.createRoom(nanoidNoLikes(), [me, userFromLobby]);
           room.players.forEach((user: User) => {
             io.sockets.sockets.get(user.id)?.emit(
               "lobby" as LobbyChannel,

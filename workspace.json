@@ -6,6 +6,7 @@
     "client-e2e": "apps/client-e2e",
     "config": "libs/config",
     "server": "apps/server",
+    "shared": "libs/shared",
     "state": "libs/state",
     "types": "libs/types",
     "ws-control": "libs/ws-control"

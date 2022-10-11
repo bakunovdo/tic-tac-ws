@@ -68,7 +68,6 @@ export class Room {
   get info() {
     return {
       id: this.id,
-      players: this.players,
     };
   }
 

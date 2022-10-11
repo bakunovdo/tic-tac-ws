@@ -1,5 +1,4 @@
 import { Event, guard, sample } from "effector";
-import { debug } from "patronum";
 import { io, Socket } from "socket.io-client";
 
 import { appStarted } from "../../app/model";
@@ -26,5 +25,3 @@ sample({
 export function withSocket<T>(event: Event<T>) {
   return guard({ source: $io, clock: event, filter: Boolean });
 }
-
-debug(gameDomain);

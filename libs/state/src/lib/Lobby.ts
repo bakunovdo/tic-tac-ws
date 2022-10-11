@@ -1,11 +1,11 @@
 import { TServerState } from "./types";
 import { User } from "./User";
 
-export type LobbyId = string;
+export type LobbyId = string; // equal code for user
 
 export class Lobby {
   // All Playeys who not in game now
-  readonly players: Map<string, User>;
+  readonly players: Map<LobbyId, User>;
 
   constructor(public readonly state: TServerState) {
     this.players = new Map<string, User>();

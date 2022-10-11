@@ -14,10 +14,12 @@ export const debugHandler = ({ io, me }: TLobbyInitilizer) => {
 
   const timerId = setInterval(() => {
     send({
-      users: [...state.users],
+      // users: [...state.users],
+      me: state.users.get(me.id),
       lobby: [...state.lobby.players],
+      rooms: [...state.rooms],
     });
-  }, 1000);
+  }, 2500);
 
   socket.on("disconnect", () => {
     console.log(socket.id, "- destroyed");

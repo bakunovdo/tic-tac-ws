@@ -17,6 +17,7 @@
     "baseUrl": ".",
     "paths": {
       "@tic-tac-ws/config": ["libs/config/src/index.ts"],
+      "@tic-tac-ws/shared": ["libs/shared/src/index.ts"],
       "@tic-tac-ws/state": ["libs/state/src/index.ts"],
       "@tic-tac-ws/types": ["libs/types/src/index.ts"],
       "@tic-tac-ws/ws-control": ["libs/ws-control/src/index.ts"]
