@@ -11,7 +11,7 @@ export const $debugState = debugDomain.createStore<unknown>("debug");
 
 const messageReceived = debugDomain.createEvent<never>();
 
-createSocketControl($io, { channel: "debug", onTarget: messageReceived });
+createSocketControl($io, { channel: "debug", target: messageReceived });
 
 sample({
   clock: messageReceived,

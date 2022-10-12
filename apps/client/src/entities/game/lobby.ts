@@ -25,7 +25,7 @@ $lobbyCode.on(updateCode, (_, payload) => payload);
 
 const lobbyControl = createSocketControl<WSClientPayload, WSServerPayload>($io, {
   channel: "lobby",
-  onTarget: messageReceived,
+  target: messageReceived,
 });
 
 split({

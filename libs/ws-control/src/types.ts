@@ -3,7 +3,7 @@ import type { Socket } from "socket.io-client";
 import { Store } from "effector";
 
 export type Options<T = unknown> = {
-  onTarget: Event<T>;
+  target: Event<T>;
   channel:
     | string
     | Store<string>
@@ -13,13 +13,18 @@ export type Options<T = unknown> = {
       };
 };
 
-export type EmitParams<Payload, T> = {
+type EventFn<P, T> = (event: EventPayload<Event<T>>) => P;
+
+export type Emit<P, E> = {
+  clock: Event<E>;
+  send: P | EventFn<P, E>;
+};
+
+export type EmitEffectParams<Payload, T> = {
   socket: Socket;
   emitName: string;
   clockData: EventPayload<Event<T>>;
   payload: Payload | ((event: EventPayload<Event<T>>) => Payload);
 };
 
-// export type NonNullData<T> = {
-//   [K in keyof T]: K[T] extends Store<infer V> ? NonNullable<V> : NonNullable<K[T]>;
-// };
+export type SocketWithEvent = { socket: Socket; event: string };

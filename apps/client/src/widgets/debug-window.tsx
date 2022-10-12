@@ -14,20 +14,27 @@ export const DebugWindow = () => {
   return (
     <section
       className={clx(
-        "absolute left-4 top-4 whitespace-pre-line text-sm max-w-md w-full max-h-96 overflow-hidden z-0",
+        "absolute left-4 top-4 whitespace-pre-line text-sm max-w-md w-full max-h-96 overflow-hidden z-10 bg-slate-100 opacity-75",
         {
           "overflow-y-scroll": isOpen,
           "max-h-10 max-w-xs": !isOpen,
         },
       )}
     >
-      <div className="flex items-center p-2  border-b-2 sticky top-0 bg-white z-10">
+      <div className="flex items-center p-2  border-b-2 sticky top-0 bg-slate-50 z-10">
         <h4 className="font-bold mr-4">Debug window</h4>
         <button className="btn btn-ghost btn-xs" onClick={toggle}>
           {isOpen ? "Close" : "Open"}
         </button>
       </div>
-      <JsonViewer value={state} rootName={false} quotesOnKeys={false} />
+      <JsonViewer
+        value={state}
+        rootName={false}
+        quotesOnKeys={false}
+        indentWidth={2}
+        displayDataTypes={false}
+        enableClipboard={false}
+      />
     </section>
   );
 };

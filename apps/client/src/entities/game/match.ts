@@ -19,12 +19,11 @@ const matchDomain = createDomain("match");
 const $matchState = matchDomain.createStore<unknown>(null);
 
 const messageReceived = matchDomain.createEvent<never>();
-
 const cellPressed = matchDomain.createEvent<[CellIdx, CellIdx]>();
 
 const matchControl = createSocketControl<ClientMatchPayload, never>($io, {
   channel: MatchPage.route.$params.map(({ matchId }) => `match/${matchId}`),
-  onTarget: messageReceived,
+  target: messageReceived,
 });
 
 sample({

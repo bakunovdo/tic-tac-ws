@@ -8,6 +8,13 @@
     ]
   ],
   "plugins": [
-    "effector/babel-plugin"
+    [
+      "effector/babel-plugin",
+      {
+        "factories": [
+          "@tic-tac-ws/ws-control"
+        ]
+      }
+    ]
   ]
 }

@@ -39,20 +39,22 @@ export const lobbyHandler = ({ io, me }: TLobbyInitilizer) => {
 
           const room = state.createRoom(nanoidNoLikes(), [me, userFromLobby]);
 
-          room.players.forEach((user: User) => {
-            io.sockets.sockets.get(user.id)?.emit(
-              "lobby" as LobbyChannel,
-              {
-                type: "[lobby-connect]-success",
-                data: room.id,
-              } as WSLobbyToClient,
-            );
-          });
+          const roomPayload: WSLobbyToClient = {
+            type: "[lobby-connect]-success",
+            data: room.id,
+          };
 
-          // TODO Create Match Handler
-          const matchChannel = `match/${room.id}`;
-          socket.on(matchChannel, (data) => {
-            console.log("match:", room.id, data);
+          room.players.forEach((user: User) => {
+            const userSocket = io.sockets.sockets.get(user.id);
+            if (!userSocket) return;
+
+            userSocket.emit("lobby" as LobbyChannel, roomPayload);
+
+            // TODO Create Match Handler
+            const matchChannel = `match/${room.id}`;
+            userSocket.on(matchChannel, (data) => {
+              console.log("userId:", userSocket.id, data);
+            });
           });
         } else send({ type: "[lobby-connect]-error", data: "code invalid" });
       }
