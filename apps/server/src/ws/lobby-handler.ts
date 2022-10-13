@@ -2,7 +2,7 @@ import { Server } from "socket.io";
 
 import { state, User } from "@tic-tac-ws/state";
 
-import { WSLobbyToClient, LobbyChannel, WSLobbyToServerPayload } from "@tic-tac-ws/types";
+import { WSLobbyServerResponse, LobbyChannel, WSLobbyClientRequest } from "@tic-tac-ws/types";
 
 import { nanoidNoLikes } from "@tic-tac-ws/shared";
 
@@ -14,11 +14,11 @@ type TLobbyInitilizer = {
 export const lobbyHandler = ({ io, me }: TLobbyInitilizer) => {
   const socket = io.sockets.sockets.get(me.id);
 
-  const send = (data: WSLobbyToClient) => socket?.emit("lobby" as LobbyChannel, data);
+  const send = (data: WSLobbyServerResponse) => socket?.emit("lobby" as LobbyChannel, data);
 
   send({ type: "lobby:code", data: me.code });
 
-  return (data: WSLobbyToServerPayload) => {
+  return (data: WSLobbyClientRequest) => {
     if (typeof data !== "object") return null;
     switch (data.type) {
       case "lobby:update-code": {
@@ -39,7 +39,7 @@ export const lobbyHandler = ({ io, me }: TLobbyInitilizer) => {
 
           const room = state.createRoom(nanoidNoLikes(), [me, userFromLobby]);
 
-          const roomPayload: WSLobbyToClient = {
+          const roomPayload: WSLobbyServerResponse = {
             type: "[lobby-connect]-success",
             data: room.id,
           };

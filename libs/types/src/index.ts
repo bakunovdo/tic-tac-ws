@@ -1,8 +1,12 @@
-export { LobbyChannel } from "./base";
+import { WSLobbyServerResponse, WSLobbyClientRequest } from "./lobby";
+import { WSMatchClientRequest } from "./match";
 
-import { WSLobbyToClient, WSLobbyToServerPayload } from "./lobby";
+//utility base
+export * from "./helpers";
+// websocket
 
 export * from "./lobby";
+export * from "./match";
 
-export type WSClientPayload = WSLobbyToServerPayload;
-export type WSServerPayload = WSLobbyToClient;
+export type WSClientRequest = WSLobbyClientRequest | WSMatchClientRequest;
+export type WSServerResponse = WSLobbyServerResponse;

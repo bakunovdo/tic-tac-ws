@@ -1,6 +1,8 @@
 import { createEffect, sample, Store } from "effector";
 import { Socket } from "socket.io-client";
 
+import { FindByTag } from "@tic-tac-ws/types";
+
 import { createEventsStores } from "./create-event-stores";
 
 import { Emit, EmitEffectParams, Options, SocketWithEvent } from "./types";
@@ -44,8 +46,8 @@ export function createSocketControl<
     });
   }
 
-  function match(matchType: ServerPayload["type"]) {
-    return (data: Partial<ServerPayload> | undefined) => matchType === data?.type;
+  function match<T extends ServerPayload["type"]>(matchType: T) {
+    return (data: FindByTag<ServerPayload, T>) => matchType === data?.type;
   }
 
   function extract(key: keyof ServerPayload) {

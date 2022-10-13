@@ -1,15 +1,17 @@
-import { LobbyChannel, LobbyGeneric, WSAsyncGeneric } from "./base";
+import { WSAsyncGeneric, SpecificChannel } from "./base";
 
 //common
+export type LobbyChannel = "lobby";
+export type LobbyGeneric<T extends string, P = undefined> = SpecificChannel<LobbyChannel, T, P>;
 
-// to server
-export type WSLobbyConnectFromClient = LobbyGeneric<"connect", string>;
-export type WSLobbyUpdateCodeFromClient = LobbyGeneric<"update-code">;
+// client request
+export type WSLobbyConnectClient = LobbyGeneric<"connect", string>;
+export type WSLobbyUpdateCodeClient = LobbyGeneric<"update-code">;
 
-export type WSLobbyToServerPayload = WSLobbyConnectFromClient | WSLobbyUpdateCodeFromClient;
+export type WSLobbyClientRequest = WSLobbyConnectClient | WSLobbyUpdateCodeClient;
 
-// to client
-export type WSLobbyCodeToClient = LobbyGeneric<"code", string>;
-export type WSLobbyConnectResult = WSAsyncGeneric<`${LobbyChannel}-connect`>;
+// server response
+export type WSLobbyCodeServer = LobbyGeneric<"code", string>;
+export type WSLobbyConnectResultServer = WSAsyncGeneric<`${LobbyChannel}-connect`>;
 
-export type WSLobbyToClient = WSLobbyCodeToClient | WSLobbyConnectResult;
+export type WSLobbyServerResponse = WSLobbyCodeServer | WSLobbyConnectResultServer;

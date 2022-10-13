@@ -2,7 +2,11 @@
 import { split } from "effector";
 import { redirect } from "atomic-router";
 
-import { WSClientPayload, WSLobbyConnectFromClient, WSServerPayload } from "@tic-tac-ws/types";
+import {
+  WSLobbyConnectClient,
+  WSLobbyServerResponse,
+  WSLobbyClientRequest,
+} from "@tic-tac-ws/types";
 import { createSocketControl } from "@tic-tac-ws/ws-control";
 
 import { gameDomain } from "./domain";
@@ -13,17 +17,17 @@ import { MatchPage } from "../../pages/match";
 
 export const $lobbyCode = gameDomain.createStore<string | null>(null);
 
-export const formSubmitted = gameDomain.createEvent<UI<WSLobbyConnectFromClient>>();
+export const formSubmitted = gameDomain.createEvent<UI<WSLobbyConnectClient>>();
 
 const updateCode = gameDomain.createEvent<string>();
 
 export const refreshCodePressed = gameDomain.createEvent();
 
-const messageReceived = gameDomain.createEvent<WSServerPayload>();
+const messageReceived = gameDomain.createEvent<WSLobbyServerResponse>();
 
 $lobbyCode.on(updateCode, (_, payload) => payload);
 
-const lobbyControl = createSocketControl<WSClientPayload, WSServerPayload>($io, {
+const lobbyControl = createSocketControl<WSLobbyClientRequest, WSLobbyServerResponse>($io, {
   channel: "lobby",
   target: messageReceived,
 });
@@ -38,7 +42,7 @@ split({
   },
   cases: {
     code: updateCode.prepend(lobbyControl.extract("data")),
-    notifyError: notifyFx.prepend(({ data }: WSServerPayload) => {
+    notifyError: notifyFx.prepend(({ data }: WSLobbyServerResponse) => {
       return {
         content: data,
         options: {
@@ -49,7 +53,7 @@ split({
 
     navigateToRoom: redirect({
       route: MatchPage.route,
-      params: (data: WSServerPayload) => ({ matchId: data.data }),
+      params: (data: WSLobbyServerResponse) => ({ matchId: data.data }),
     }),
   },
 });
