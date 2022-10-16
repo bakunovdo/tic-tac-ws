@@ -7,11 +7,13 @@ const route = createRoute();
 
 const Page = () => {
   return (
-    <div>
-      <h1>This is not found page</h1>
-      <br />
-      <br />
-      <Link to={LobbyPage.route}>Home Page</Link>
+    <div className="max-w-xl mx-auto h-full flex flex-col justify-center">
+      <div className="mx-auto text-center">
+        <h2 className="font-bold">Page not found</h2>
+        <Link className="flex mt-4 btn btn-primary" to={LobbyPage.route}>
+          Home Page
+        </Link>
+      </div>
     </div>
   );
 };

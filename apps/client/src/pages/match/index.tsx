@@ -2,28 +2,28 @@ import { CellIdx } from "@tic-tac-ws/types";
 import { createRoute } from "atomic-router";
 
 import clx from "classnames";
-import { useEvent } from "effector-react";
+import { useEvent, useStore } from "effector-react";
 import { matchModel } from "../../entities/game";
 
 const route = createRoute<{ matchId: string }>();
 
-function chunk<T>(arr: T[], len: number) {
-  const chunks = [];
-  let i = 0;
-
-  while (i < arr.length) {
-    chunks.push(arr.slice(i, (i += len)));
-  }
-
-  return chunks;
-}
-
 const Page: React.FC = () => {
+  const isConnecting = useStore(matchModel.$isConnecting);
   const onCellPressed = useEvent(matchModel.events.cellPressed);
 
   const isMeTurn = true;
   const isEnemyTurn = !isMeTurn;
-  const board = chunk([0, 1, -1, 0, 1, 0, 1, 0, -1], 3);
+
+  const board = [
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+  ];
+
+  if (isConnecting) {
+    return <>loading...</>;
+  }
+
   return (
     <div className="max-w-xl mx-auto h-full flex flex-col justify-center">
       <div className="mx-auto w-1/2 flex justify-center items-center font-bold">

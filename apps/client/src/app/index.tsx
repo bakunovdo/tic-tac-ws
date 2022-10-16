@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import { appStarted } from "./model";
 import { MatchPage } from "../pages/match";
 import { DebugWindow } from "../widgets/debug-window";
+import { MatchNotFound } from "../pages/match/not-found";
 
 export function Application() {
   useEffect(appStarted, []);
@@ -25,6 +26,7 @@ export function Application() {
           <Route route={LobbyPage.route} view={LobbyPage.Page} />
           <Route route={NotFound.route} view={NotFound.Page} />
           <Route route={MatchPage.route} view={MatchPage.Page} />
+          <Route route={MatchNotFound.route} view={MatchNotFound.Page} />
         </RouterProvider>
       </div>
       <ToastContainer />

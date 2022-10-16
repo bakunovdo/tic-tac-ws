@@ -4,6 +4,7 @@ import { Store } from "effector";
 
 export type Options<T = unknown> = {
   target: Event<T>;
+  filter?: Store<boolean>;
   channel:
     | string
     | Store<string>

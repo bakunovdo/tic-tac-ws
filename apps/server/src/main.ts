@@ -22,7 +22,8 @@ state.initUser("debug");
 
 io.on("connection", onConnection(io));
 
-app.get(":id", (req, res) => {
-  const roomId = req.params.id;
-  console.log({ roomId });
+app.get("/match/:id", (req, res) => {
+  const isHas = state.rooms.has(req.params.id);
+  if (!isHas) res.status(400);
+  res.send(isHas);
 });
