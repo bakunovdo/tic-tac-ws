@@ -1,36 +1,40 @@
 import { UserId } from "./User";
 import { User } from "./User/class";
 import { TServerState } from "./types";
+import { ROOM_CREATED } from "./const";
 
-export type TPlayers = [User, User] | [User] | [];
+export type FullPlayersRoom = [User, User];
+export type PartPlayersRoom = [User, null] | [null, User];
+export type EmptyPlayersRoom = [null, null];
+
+export type TPlayers = FullPlayersRoom | PartPlayersRoom | EmptyPlayersRoom;
 
 export type RoomId = string;
 
 export class Room {
-  constructor(
-    private state: TServerState | undefined = undefined,
-    public id: RoomId,
-    public players: TPlayers = [],
-  ) {
-    this.state?.rooms.set(id, this);
-    if (players[0]) {
-      this.state?.lobby.leave(players[0]);
-      players[0].join(this);
-    }
+  public players: TPlayers;
 
-    if (players[1]) {
-      this.state?.lobby.leave(players[1]);
-      players[1].join(this);
-    }
+  constructor(private state: TServerState, public id: RoomId, players: FullPlayersRoom) {
+    this.state?.rooms.set(id, this);
+    this.players = players;
+    players.forEach((player) => {
+      this.state?.lobby.leave(player);
+      player.join(this);
+    });
+
+    this.state.emitter.emit(ROOM_CREATED, this);
   }
 
   private isUserAt(id: 0 | 1, value: User | UserId) {
-    return this.players[id] === value || this.players[id]?.id === value;
+    return (
+      this.players[id] === value ||
+      this.players[id]?.id === value ||
+      this.players[id]?.code === "1234"
+    );
   }
 
   private destroy() {
     this.state?.rooms.delete(this.id);
-    delete this.state;
   }
 
   add(user: User): Room {
@@ -42,11 +46,9 @@ export class Room {
   }
 
   remove(value: User | UserId): Room {
-    if (this.isUserAt(0, value)) this.players[0] = undefined;
-    if (this.isUserAt(1, value)) this.players[1] = undefined;
-
+    if (this.isUserAt(0, value)) this.players[0] = null;
+    if (this.isUserAt(1, value)) this.players[1] = null;
     if (this.len === 0) this.destroy();
-
     return this;
   }
 
@@ -68,6 +70,7 @@ export class Room {
   get info() {
     return {
       id: this.id,
+      len: this.len,
     };
   }
 

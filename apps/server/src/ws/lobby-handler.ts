@@ -47,14 +47,7 @@ export const lobbyHandler = ({ io, me }: TLobbyInitilizer) => {
           room.players.forEach((user: User) => {
             const userSocket = io.sockets.sockets.get(user.id);
             if (!userSocket) return;
-
             userSocket.emit("lobby" as LobbyChannel, roomPayload);
-
-            // TODO Create Match Handler
-            const matchChannel = `match/${room.id}`;
-            userSocket.on(matchChannel, (data) => {
-              console.log("userId:", userSocket.id, data);
-            });
           });
         } else send({ type: "[lobby-connect]-error", data: "code invalid" });
       }

@@ -1,3 +1,4 @@
+import EventEmitter from "events";
 import { Lobby } from "./Lobby";
 import { Room, RoomId } from "./Room";
 import { User } from "./User";
@@ -8,6 +9,8 @@ export interface TServerState {
   rooms: Map<RoomId, Room>;
 
   options: TServerOptions;
+
+  emitter: EventEmitter;
 }
 
 export type TServerOptions = {
