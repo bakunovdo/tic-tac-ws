@@ -14,6 +14,10 @@ const $matchState = matchDomain.createStore<unknown>(null);
 const messageReceived = matchDomain.createEvent<never>();
 const cellPressed = matchDomain.createEvent<UI<WSMatchCellClickedClient>>();
 
+const connectToMatchFx = matchDomain.createEffect<string, unknown>((matchId) => {
+  return fetch;
+});
+
 const matchControl = createSocketControl<WSMatchClientRequest, never>($io, {
   channel: MatchPage.route.$params.map(({ matchId }) => `match/${matchId}`),
   target: messageReceived,

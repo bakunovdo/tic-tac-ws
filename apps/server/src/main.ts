@@ -12,7 +12,7 @@ const app = express();
 app.use(cors(CORS));
 
 const server = createServer(app);
-const io = new Server(server, { cors: CORS });
+const io = new Server(server, { cors: CORS, path: "/ws" });
 
 server.listen(PORT, () => {
   console.log(`[server]: Server is running at http://localhost:${PORT}`);
@@ -21,3 +21,8 @@ server.listen(PORT, () => {
 state.initUser("debug");
 
 io.on("connection", onConnection(io));
+
+app.get(":id", (req, res) => {
+  const roomId = req.params.id;
+  console.log({ roomId });
+});
