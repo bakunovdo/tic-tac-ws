@@ -1,9 +1,9 @@
+import { CellIdx } from "@tic-tac-ws/types";
 import { createRoute } from "atomic-router";
 
 import clx from "classnames";
 import { useEvent } from "effector-react";
 import { matchModel } from "../../entities/game";
-import { CellIdx } from "../../entities/game/match";
 
 const route = createRoute<{ matchId: string }>();
 

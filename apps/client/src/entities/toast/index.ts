@@ -1,12 +1,12 @@
 import { createEffect } from "effector";
 import { toast, ToastOptions } from "react-toastify";
 
-type ToastEffectOptions = string | { content: string; options: ToastOptions };
+export type ToastEffectOptions = string | { content: string; options: ToastOptions };
 
 const baseOptions: ToastOptions = {
   pauseOnHover: false,
   pauseOnFocusLoss: false,
-  autoClose: 1500,
+  autoClose: 2500,
 };
 
 export const notifyFx = createEffect((params: ToastEffectOptions) => {

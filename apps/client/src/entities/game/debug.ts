@@ -7,7 +7,7 @@ import { $io } from "./socket";
 
 const debugDomain = createDomain("debug");
 
-export const $debugState = debugDomain.createStore<unknown>("debug");
+export const $debugState = debugDomain.createStore<null>(null);
 
 const messageReceived = debugDomain.createEvent<never>();
 

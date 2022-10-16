@@ -2,19 +2,29 @@ import { Event, guard, sample } from "effector";
 import { io, Socket } from "socket.io-client";
 
 import { appStarted } from "../../app/model";
-import { WS_URL } from "../../shared/config";
+import { BACKEND_URL } from "../../shared/config";
+import { notifyFx, ToastEffectOptions } from "../toast";
 import { gameDomain } from "./domain";
 
 export const $io = gameDomain.createStore<Socket | null>(null);
 
 export const initlizeSocketFx = gameDomain.createEffect(() => {
-  if (!WS_URL) throw new Error("WebSocket URL not defined");
-  return io(WS_URL);
+  if (!BACKEND_URL) throw new Error("WebSocket URL not defined");
+  return io(BACKEND_URL, { path: "/ws" });
 });
 
 sample({
   clock: appStarted,
   target: initlizeSocketFx,
+});
+
+sample({
+  clock: initlizeSocketFx.fail,
+  fn: (): ToastEffectOptions => ({
+    content: "Connection to WebSocket failed!",
+    options: { type: "error" },
+  }),
+  target: notifyFx,
 });
 
 sample({
